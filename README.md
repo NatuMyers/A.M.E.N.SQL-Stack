@@ -1,3 +1,10 @@
-# SEASQL_Stack_wRestfulApi__MySQL-Sequelize-Express-Angular
-## Made with a Yeoman Generator https://github.com/rayokota/generator-angular-express-sequelize
+# AMEN_SQL Stack 🙏
+## Ingredients:<br />
+<b>A<b /> ngularJS<br />
+<b>M<b /> aterialize (Frontend) https://github.com/krescruz/angular-materialize<br />
+<b>E<b /> xpressJS<br />
+<b>N<b /> odeJS<br />
+Sequelize ORM + <b>SQL<b /> <br />
+
+##Scaffolded with a Yeoman Generator https://github.com/rayokota/generator-angular-express-sequelize
 (But instead of SQLITE uses MySQL)
