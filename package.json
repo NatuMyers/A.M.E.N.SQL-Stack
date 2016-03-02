@@ -6,16 +6,20 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "bluebird": "^3.0.0",
     "body-parser": "~1.0.0",
     "browser-sync": "^2.9.6",
+    "epilogue": "^0.6.5",
     "errorhandler": "~1.0.0",
     "express": "4.1.1",
     "gulp": "^3.9.1",
-    "lodash": "~2.4.1",
+    "inflection": "^1.7.1",
+    "lodash": "^3.10.1",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
     "mysql": "^2.10.2",
-    "sequelize": "~2.0.0-beta.2"
+    "sequelize": "^1.7.0-rc2",
+    "sequelize-restful-extended": "^0.1.4"
   },
   "devDependencies": {
     "grunt-autoprefixer": "~0.4.2",
