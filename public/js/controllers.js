@@ -1,3 +1,5 @@
+
+
 var artistControllers = angular.module('artistControllers', ['ngAnimate']);
 
 artistControllers.controller('ListController', ['$scope', '$http', function($scope, $http) {
@@ -26,4 +28,7 @@ artistControllers.controller('DetailsController', ['$scope', '$http','$routePara
 
   });
 }]);
+
+
+
 

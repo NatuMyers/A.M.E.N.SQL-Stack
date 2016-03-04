@@ -7,6 +7,10 @@
   "repository": "https://github.com/krescruz/angular-materialize",
   "main": "src/index.js",
   "dependencies": {
+    "angular": ">=1.3.5",
+    "angular-ui-router": "^0.2.18",
+    "jquery": ">=2.1.1",
+    "materialize": "~0.97.2",
     "node-materialize": "https://github.com/ryepdx/node-materialize/tarball/master"
   },
   "devDependencies": {

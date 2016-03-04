@@ -1,14 +1,92 @@
-var app = angular.module('breezeNetworkApp', ['ui.materialize','ngResource','ui.router'])
-// ngResource: https://hello-angularjs.appspot.com/angularjs-restful-apis-get-method-code-example
-// "Also, your main app module should declare a dependency on the ngResource module in order to use $resource. The following example demonstrates how to do it:"
-    
-    
+var app = angular.module('myApp', ['ui.materialize','ngResource','ui.router', '$stateProvider', '$locationProvider', '$urlRouterProvider'])
+
+        'use strict';
+
+        .config( function($stateProvider, $urlRouterProvider, $locationProvider, $provide) {
+                    $urlRouterProvider.otherwise('/about');
+
+                    // PAGES
+
+                    $stateProvider
+
+                        .state('index', {
+                        url: '/index',
+                        templateUrl: '../index.html',
+                    })
+
+                        .state('email', {
+                        url: '/email',
+                        templateUrl: '../pages/email.html',
+                        controller: 'EmailController'
+                    })
+
+
+                    .state('about', {
+                        url: '/about',
+                        templateUrl: '../pages/about.html',
+                        controller: 'AboutController'
+                    })
+
+                    .state('login', {
+                        url: '/login',
+                        templateUrl: '../pages/login.html',
+                        controller: 'LoginController'
+                    })
+
+                    .state('signup', {
+                        url: '/signup',
+                        templateUrl: '../pages/signup.html',
+                        controller: 'SignUpController'
+                    })
+
+                    .state('search', {
+                        url: '/search',
+                        templateUrl: '../pages/search.html',
+                        controller: 'SearchController'
+                    })
+
+                    .state('feedback', {
+                        url: '/feedback',
+                        templateUrl: '../pages/feedback.html',
+                        controller: 'FeedbackController'
+                    })
+
+                    .state('feedback', {
+                        url: '/map',
+                        templateUrl: '../pages/map.html',
+                        controller: 'MapController'
+                    })
+
+                    .state('tos', {
+                        url: '/tos',
+                        templateUrl: '../pages/tos.html',
+                        controller: 'tosController'
+                    })
+
+                   $locationProvider.html5Mode({
+                        enabled: true,
+                        requireBase: false
+                    })
+
+                    $provide.decorator('$sniffer', function($delegate) {
+                        $delegate.history = false;
+                        return $delegate;
+                    });
+
+                })
 
 
 
+ .controller('MainController', function($scope, $route, $routeParams, $location) {
+            $scope.$route = $route;
+            $scope.$location = $location;
+            $scope.$routeParams = $routeParams;
+    })
 
 
 .controller('ResourceController',function($scope, Entry) {
+
+
   var entry = Entry.get({ id: $scope.id }, function() {
     console.log(entry);
   }); // get() returns a single entry
@@ -23,7 +101,7 @@ var app = angular.module('breezeNetworkApp', ['ui.materialize','ngResource','ui.
 
   Entry.save($scope.entry, function() {
     //data saved. do something here.
-  }); //saves an entry. Assuming $scope.entry is the Entry object  
+  }); //saves an entry. Assuming $scope.entry is the Entry object
 })
 
 
@@ -48,9 +126,9 @@ var app = angular.module('breezeNetworkApp', ['ui.materialize','ngResource','ui.
 
         $scope.users = UsersFactory.query();
     }])
-    
 
-    
+
+
     .controller('CollapsibleController', ["$scope", function ($scope) {
         $scope.collapsibleElements = [{
             icon: 'mdi-image-filter-drama',
