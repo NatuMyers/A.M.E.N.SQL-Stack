@@ -1,48 +1,47 @@
 <!DOCTYPE html>
-<html>
+
+<html ng-app="myApp" lang="en">
+
 <head>
-    <!-- JS (load angular, ui-router, and our custom js file) -->
-    <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.js"></script>
+    <base href="/">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+    <title>Wave</title>
 
-    <script src="/js/app.js"></script>
-
-
+    <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
     <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
 
+    <script type="text/javascript" src="/src/angular-materialize.js"></script>
+    <script type="text/javascript" src="/js/app.js"></script>
+
+    <!-- Angular -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.js"></script>
+    <!-- UI-Router -->
+    <!-- <script src="//angular-ui.github.io/ui-router/release/angular-ui-router.js"></script> -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.8/angular-ui-router.min.js"></script>
+
+     <script>
+    // ...and add 'ui.router' as a dependency
+    var myApp = angular.module('myApp', ['ui.router']);
+    </script>
+
+
+    <!-- <script src="/js/routers.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="../js/materialize.js"></script>
+    <script src="../js/init.js"></script>
+
 </head>
 
-<!-- apply our angular app to our site -->
-<body ng-app="routerApp">
 
-<!-- NAVIGATION -->
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="navbar-header">
-        <a class="brand thin" ui-sref="#">myApp</a>
-    </div>
-    <ul class="nav navbar-nav">
-        <li><a ui-sref="home">Home</a></li>
-        <li><a ui-sref="about">About</a></li>
-    </ul>
-</nav>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN CONTENT AND INJECTED VIEWS -->
+<!-- Angular UI Router Directive for template insertion -->
 <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
-<div class="container">
-
-    <div ui-view></div>
-</div>
-
-<div class="text-center">
-    <p>A tutorial by <a href="http://scotch.io" target="_blank">scotch.io</a></p>
-    <p>View the tutorial: <a href="http://scotch.io/tutorials/javascript/angular-routing-using-ui-router" target="_blank">AngularJS Routing using UI-Router</a></p>
-</div>
-
-
-
+<div ui-view></div>
 
 
 
@@ -88,14 +87,6 @@
         </div>
     </div>
 </footer>
-
-
-
-
-</body>
-
-
-
 
 
 

@@ -1,82 +1,74 @@
-var app = angular.module('myApp', ['ui.materialize','ngResource','ui.router', '$stateProvider', '$locationProvider', '$urlRouterProvider'])
+var routerApp = angular.module('routerApp', ['ui.router']);
 
-        'use strict';
+routerApp.config(function($stateProvider, $urlRouterProvider) {
 
-        .config( function($stateProvider, $urlRouterProvider, $locationProvider, $provide) {
-                    $urlRouterProvider.otherwise('/about');
+    $urlRouterProvider.otherwise('/home');
 
-                    // PAGES
+    $stateProvider
 
-                    $stateProvider
+        // HOME STATES AND NESTED VIEWS ========================================
+        .state('home', {
+            url: '/home',
+            templateUrl: '/partials/partial-home.html'
+        })
 
-                        .state('index', {
-                        url: '/index',
-                        templateUrl: '../index.html',
-                    })
+        // nested list with custom controller
+        .state('home.list', {
+            url: '/list',
+            templateUrl: '/partials/partial-home-list.html',
+            controller: function($scope) {
+                $scope.dogs = ['Bernese', 'Husky', 'Goldendoodle'];
+            }
+        })
 
-                        .state('email', {
-                        url: '/email',
-                        templateUrl: '../pages/email.html',
-                        controller: 'EmailController'
-                    })
+        // nested list with just some random string data
+        .state('home.paragraph', {
+            url: '/partials/paragraph',
+            template: 'I could sure use a drink right now.'
+        })
 
+        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
+        .state('about', {
+            url: '/partials/about',
+            views: {
+                '': { templateUrl: 'about.html' },
+                'columnOne@about': { template: 'Look I am a column!' },
+                'columnTwo@about': {
+                    templateUrl: 'partial-table-data.html',
+                    controller: 'scotchController'
+                }
+            }
 
-                    .state('about', {
-                        url: '/about',
-                        templateUrl: '../pages/about.html',
-                        controller: 'AboutController'
-                    })
+        });
 
-                    .state('login', {
-                        url: '/login',
-                        templateUrl: '../pages/login.html',
-                        controller: 'LoginController'
-                    })
-
-                    .state('signup', {
-                        url: '/signup',
-                        templateUrl: '../pages/signup.html',
-                        controller: 'SignUpController'
-                    })
-
-                    .state('search', {
-                        url: '/search',
-                        templateUrl: '../pages/search.html',
-                        controller: 'SearchController'
-                    })
-
-                    .state('feedback', {
-                        url: '/feedback',
-                        templateUrl: '../pages/feedback.html',
-                        controller: 'FeedbackController'
-                    })
-
-                    .state('feedback', {
-                        url: '/map',
-                        templateUrl: '../pages/map.html',
-                        controller: 'MapController'
-                    })
-
-                    .state('tos', {
-                        url: '/tos',
-                        templateUrl: '../pages/tos.html',
-                        controller: 'tosController'
-                    })
-
-                   $locationProvider.html5Mode({
-                        enabled: true,
-                        requireBase: false
-                    })
-
-                    $provide.decorator('$sniffer', function($delegate) {
-                        $delegate.history = false;
-                        return $delegate;
-                    });
-
-                })
+});
 
 
 
+
+routerApp.controller('scotchController', function($scope) {
+
+    $scope.message = 'test';
+
+    $scope.scotches = [
+        {
+            name: 'Macallan 12',
+            price: 50
+        },
+        {
+            name: 'Chivas Regal Royal Salute',
+            price: 10000
+        },
+        {
+            name: 'Glenfiddich 1937',
+            price: 20000
+        }
+    ];
+
+});
+
+
+/*
  .controller('MainController', function($scope, $route, $routeParams, $location) {
             $scope.$route = $route;
             $scope.$location = $location;
@@ -185,3 +177,5 @@ var app = angular.module('myApp', ['ui.materialize','ngResource','ui.router', '$
             console.log('onStop');
         };
     }]);
+
+*/
