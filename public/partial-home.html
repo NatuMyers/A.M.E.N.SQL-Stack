@@ -4,46 +4,45 @@
 
         <div class="section no-pad-bot" id="index-banner">
             <div class="container">
-                <br><br>
-                <h1 class="header center black-text thin">Enter Your Email</h1>
+                <br></br>
+                <h1 class="header center  thin">Enter Your Email</h1>
 
                 <div class="col s12 m6 l6 center">
-                    <div class="card-panel blue black-text ">
+                    <div class="card-panel  grey lighten-3">
                         <div ng-controller="joinFormController">
                             <form>
-
                                 <div class="row">
-                                    <div class="white-text input-field col s6 offset-s3">
+                                    <div class=" input-field col s6 offset-s3">
                                         <i class="material-icons prefix">account_circle</i>
                                         <input type="text" class="validate" ng-model="user.username">
 
                                     </div>
                                 </div>
-
                                 <button class="btn waves-effect waves-light" type="submit" ng-click="createTodo()">Submit
                                     <i class="material-icons right">send</i>
                                 </button>
 
                             </form>
                         </div>
-
                     </div>
-
-
-
                 </div>
 
 
+                <a ui-sref=".list" class = "btn" >List</a>
+                <a ui-sref=".paragraph" class = "btn" >Paragraph</a>
+                <div ui-view></div>
             </div>
-            <br><br>
+
+            <br></br>
+
+
         </div>
 
 
 
 
 
-    <a ui-sref=".list" class="btn btn-primary">List</a>
-    <a ui-sref=".paragraph" class="btn btn-danger">Paragraph</a>
 
 
-<div ui-view></div>
+
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <!-- JS (load angular, ui-router, and our custom js file) -->
     <script src="http://code.angularjs.org/1.2.13/angular.js"></script>
@@ -21,36 +22,41 @@
 <!-- NAVIGATION -->
 <nav role="navigation">
             <div class="nav-wrapper container "><a id="logo-container" href="#" class="brand-logo thin white-text">Wave</a>
+
+            <!-- HOME -->
+                <!-- Desktop version -->
                 <ul class="right hide-on-med-and-down">
-                    <li class="thin"><a href="#">Navbar Link</a>
+                    <li class="thin"><a ui-sref="home">Home</a>
+                    </li>
+                </ul>
+                <!-- Mobile Version -->
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a ui-sref="home">Home</a>
                     </li>
                 </ul>
 
-                <ul id="nav-mobile" class="side-nav">
-                    <li><a href="#">Navbar Link</a>
+            <!-- ABOUT -->
+                <!-- Desktop version -->
+                <ul class="right hide-on-med-and-down">
+                    <li class="thin"><a ui-sref="about">About</a>
                     </li>
                 </ul>
+                <!-- Mobile Version -->
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a ui-sref="about">About</a>
+                    </li>
+                </ul>
+
+
+
                 <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
             </div>
-        </nav>
-<!-- MAIN CONTENT -->
+</nav>
+
 <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
-<div class="container">
+<div ui-view></div>
 
-    <div ui-view></div>
-</div>
-
-<div class="text-center">
-    <p>A tutorial by <a href="http://scotch.io" target="_blank">scotch.io</a></p>
-    <p>View the tutorial: <a href="http://scotch.io/tutorials/javascript/angular-routing-using-ui-router" target="_blank">AngularJS Routing using UI-Router</a></p>
-</div>
-
-
-
-
-
-
-<footer class="page-footer blue ">
+<footer class="page-footer  ">
     <div class="container">
         <div class="row">
             <div class="col l6 s12">
@@ -93,14 +99,6 @@
     </div>
 </footer>
 
-
-
-
 </body>
-
-
-
-
-
 
 </html>
