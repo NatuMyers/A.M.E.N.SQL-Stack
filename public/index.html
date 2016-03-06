@@ -19,16 +19,20 @@
 <body ng-app="routerApp">
 
 <!-- NAVIGATION -->
-<nav class="navbar navbar-inverse" role="navigation">
-    <div class="navbar-header">
-        <a class="brand thin" ui-sref="#">myApp</a>
-    </div>
-    <ul class="nav navbar-nav">
-        <li><a ui-sref="home">Home</a></li>
-        <li><a ui-sref="about">About</a></li>
-    </ul>
-</nav>
+<nav role="navigation">
+            <div class="nav-wrapper container "><a id="logo-container" href="#" class="brand-logo thin white-text">Wave</a>
+                <ul class="right hide-on-med-and-down">
+                    <li class="thin"><a href="#">Navbar Link</a>
+                    </li>
+                </ul>
 
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a href="#">Navbar Link</a>
+                    </li>
+                </ul>
+                <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+            </div>
+        </nav>
 <!-- MAIN CONTENT -->
 <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->
 <div class="container">
