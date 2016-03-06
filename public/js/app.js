@@ -13,33 +13,9 @@ routerApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'partial-home.html'
         })
 
-        // nested list with just some random string data
-        .state('home.paragraph', {
-            url: '/paragraph',
-            template: 'I could sure use a drink right now.'
-        })
-
-        // nested list with custom controller
-        .state('home.list', {
-            url: '/list',
-            templateUrl: 'partial-home-list.html',
-            controller: function($scope) {
-                $scope.dogs = ['Bernese', 'Husky', 'Goldendoodle'];
-            }
-        })
-
-        // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
         .state('about', {
             url: '/about',
-            views: {
-                '': { templateUrl: 'partial-about.html' },
-                'columnOne@about': { template: 'Look I am a column!' },
-                'columnTwo@about': {
-                    templateUrl: 'partial-table-data.html',
-                    controller: 'scotchController'
-                }
-            }
-
+            templateUrl: 'partial-about.html'
         });
 
 });
