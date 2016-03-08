@@ -19,32 +19,188 @@ app.use(bodyParser.json());
 
 
 
-// MODELS ---- ---- ---- ----
 
 // Add Employee model
 var database = new Sequelize('raptroopdb', 'root', 'strongpassword');
 
-var Employee = database.define('Employee', {
-  name: Sequelize.STRING,
-  hireDate: Sequelize.DATE
+
+// MODELS ---- ---- ---- ----
+
+
+// "id", "createdAt", and "updatedAt" are autmatic keys
+// Sequelize automatically pluralizes model names
+// i.e. User becomes a table "Users" in the database
+
+/*
+Some times you may want to reference another table,
+without adding any constraints, or associations.
+In that case you can manually add the reference
+attributes to your schema definition, and mark
+the relations between them.
+*/
+
+var User = database.define('User', {
+
+	//string
+    username: Sequelize.STRING,
+    userType: Sequelize.STRING,
+
+	email: Sequelize.STRING,
+	k: Sequelize.STRING,
+	fname: Sequelize.STRING,
+	lname: Sequelize.STRING,
+	username: Sequelize.STRING,
+	summary: Sequelize.STRING,
+
+    //links
+	soundcloud: Sequelize.STRING,
+	noisetrade: Sequelize.STRING,
+	itunes: Sequelize.STRING,
+	bandcamp: Sequelize.STRING,
+	twitter: Sequelize.STRING,
+	facebook: Sequelize.STRING,
+	behance: Sequelize.STRING,
+	linkedin: Sequelize.STRING,
+	personal: Sequelize.STRING,
+	dribbble: Sequelize.STRING,
+
+	//ints
+	messagesSent: Sequelize.INTEGER,
+	numCollabs: Sequelize.INTEGER,
+	numPayments: Sequelize.INTEGER,
+	successfulCollabs: Sequelize.INTEGER,
+	followers: Sequelize.INTEGER,
+	following: Sequelize.INTEGER,
+	rating: Sequelize.INTEGER,
+	hashcardno: Sequelize.INTEGER,
+	longitude: Sequelize.INTEGER,
+	latitude: Sequelize.INTEGER,
+
+	//bools
+	isShowingSoc: Sequelize.BOOLEAN,
+	isShowingLoc: Sequelize.BOOLEAN,
+	isShowingSO: Sequelize.BOOLEAN,
+	isSuspended: Sequelize.BOOLEAN,
+	isBanned: Sequelize.BOOLEAN,
+	isAuth: Sequelize.BOOLEAN,
+
+	//date
+	dob: Sequelize.DATE
+
 });
 
-// Add Account model with foreign key constraint to Employee
-var Account = database.define('Account', {
-  name: Sequelize.STRING,
-  managerId: {
+// Add Account model with foreign key constraint to User
+var Collab = database.define('Collab', {
+	payAmount: Sequelize.INTEGER,
+	longitude: Sequelize.INTEGER,
+	latitude: Sequelize.INTEGER,
+
+    isPaid: Sequelize.BOOLEAN,
+    isIRL: Sequelize.BOOLEAN,
+
+	collabName: Sequelize.STRING,
+	state: Sequelize.STRING,
+	imageDirectory: Sequelize.STRING,
+
+	creatorId: {
   	type: Sequelize.INTEGER,
 
 		  references: {
-		    // This is a reference to model Employee
-		    model: Employee,
+		    // This is a reference to model User
+		    model: User,
 
 		    // This is the column name of the referenced model
 		    key: 'id',
-
 		  }
-  }
+  	},
+	joinerId: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: User,
+
+		    // This is the column name of the referenced model
+		    key: 'id',
+		  }
+  	}
+
 });
+
+User.hasMany(Collab);
+Collab.belongsTo(User);
+
+// Follower relation
+var Follow = database.define('Follow', {
+	followeeID: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: User,
+
+		    // This is the column name of threferenced model
+		    key: 'id',
+		  }
+  	},
+	followerID: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: User,
+
+		    // This is the column name of the referenced model
+		    key: 'id',
+		  }
+  	}
+});
+
+User.hasMany(Follow);
+Follow.belongsTo(User, { as: 'Current', foreignKey: 'id', constraints: false});
+
+
+// Message thread
+var messageThread = database.define('Follow', {
+    text: Sequelize.INTEGER,
+    fileDirectory: Sequelize.INTEGER,
+	fromCollab: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: Collab,
+
+		    // This is the column name of threferenced model
+		    key: 'id',
+		  }
+  	},
+	senderID: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: User,
+
+		    // This is the column name of threferenced model
+		    key: 'id',
+		  }
+  	},
+	recieverID: {
+  	type: Sequelize.INTEGER,
+
+		  references: {
+		    // This is a reference to model User
+		    model: User,
+
+		    // This is the column name of the referenced model
+		    key: 'id',
+		  }
+  	}
+});
+
+Collab.hasMany(messageThread);
+messageThread.belongsTo(Collab);
 
 // middleware to use for all requests
 router.use(function(req, res, next) {
@@ -96,7 +252,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-*/
+
 
 // PAGE END POINTS  ---- ---- ---- ----
 // use res.render to load up an ejs view file
@@ -108,33 +264,37 @@ app.use(function(err, req, res, next) {
 // http://stackoverflow.com/questions/19620239/cant-get-index-html-to-show-with-express-in-nodejs
 // __dirname is the directory that the executing script resides in,
 // so because that lives in the js directory that's a peer to public your code would need to be:
+*/
+
 app.use(express.static(__dirname + "/public"));
 app.get('/', function(req, res){
   res.redirect('/public/index.html');
 });
 
-
-
-
-
-
 // MODEL END POINTS ---- ---- ---- ----
 // Create REST resource
-var employeeResource = epilogue.resource({
-  model: Employee,
-  endpoints: ['/api/employees', '/api/employees/:id']
+var userResource = epilogue.resource({
+  model: User,
+  endpoints: ['/api/users', '/api/users/:id']
 });
 
-var acctResource = epilogue.resource({
-  model: Account,
-  endpoints: ['/api/accounts', '/api/accounts/:id']
+var collabResource = epilogue.resource({
+  model: Collab,
+  endpoints: ['/api/collabs', '/api/collabs/:id']
 });
+
+var messageThreadResource = epilogue.resource({
+  model: messageThread,
+  endpoints: ['/api/messageThreads', '/api/messageThreads/:id']
+});
+
+
 
 // Create database and listen
 database
-  .sync({ force: false })
-  .then(function() {
+    .sync({ force: false })
+    .then(function() {
     app.listen(port, function() {
-      console.log('listening at %s', port);
+        console.log('listening at %s', port);
     });
-  });
+});
