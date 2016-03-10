@@ -10,12 +10,21 @@ var router = express.Router();
 var morgan = require('morgan');             // log requests to the console (express4)
 var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
+// var passportLocalSequelize = require('passport-local-sequelize');
+// var EncryptedField = require('sequelize-encrypted');
 
-// set the view engine to ejs
-// app.set('view engine', 'ejs');
+var passport = require('passport'); // Passport: Middleware de Node que facilita la autenticación de usuarios
+var passportLocal =require('passport-local').Strategy;
+
+
+
+var bcrypt = require("bcrypt");
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// secret key should be 32 bytes hex encoded (64 characters)
 
 
 
@@ -39,31 +48,103 @@ attributes to your schema definition, and mark
 the relations between them.
 */
 
+
 var User = database.define('User', {
 
 	//string
-    username: Sequelize.STRING,
-    userType: Sequelize.STRING,
 
-	email: Sequelize.STRING,
-	k: Sequelize.STRING,
+	// the important
+
+	username: {
+	    unique: true,
+	    isAlphanumeric: true, // only alphanumeric
+		type: Sequelize.STRING,
+		//allowNull: false,
+		validate: {
+			notEmpty: true,
+			len: [1,15]
+		}
+	},
+	email: {
+	    unique: true,
+		type: Sequelize.STRING,
+		//allowNull: false,
+		validate: {
+			isEmail: true,
+			notEmpty: true,
+			len: [1,15]
+		}
+	},
+	hashword: Sequelize.STRING,
+
+	//other strings
+    userType: Sequelize.STRING,
 	fname: Sequelize.STRING,
 	lname: Sequelize.STRING,
 	username: Sequelize.STRING,
 	summary: Sequelize.STRING,
 
     //links
-	soundcloud: Sequelize.STRING,
-	noisetrade: Sequelize.STRING,
-	itunes: Sequelize.STRING,
-	bandcamp: Sequelize.STRING,
-	twitter: Sequelize.STRING,
-	facebook: Sequelize.STRING,
-	behance: Sequelize.STRING,
-	linkedin: Sequelize.STRING,
-	personal: Sequelize.STRING,
-	dribbble: Sequelize.STRING,
-
+	soundcloud: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	noisetrade: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	itunes: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	bandcamp: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	twitter: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	facebook: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	behance: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	linkedin: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	personal: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
+	dribbble: {
+	    type: Sequelize.STRING,
+	    validate: {
+	        isUrl: true // // checks for url format (http://foo.com)
+	    }
+	},
 	//ints
 	messagesSent: Sequelize.INTEGER,
 	numCollabs: Sequelize.INTEGER,
@@ -87,7 +168,34 @@ var User = database.define('User', {
 	//date
 	dob: Sequelize.DATE
 
+},   {
+	hooks: {
+		beforeValidate: function() {
+
+		},
+		afterValidate: function(User) {
+			// hashed pwd goes to db
+			//var hw = User.hashword;
+			//var salt = bcrypt.genSaltSync(10);
+			User.hashword = bcrypt.hashSync(User.hashword, 10);
+
+
+		},
+		beforeCreate: function() {
+
+		},
+		afterCreate: function() {
+
+		}
+	}
 });
+
+
+
+
+
+
+
 
 // Add Account model with foreign key constraint to User
 var Collab = database.define('Collab', {
@@ -127,6 +235,7 @@ var Collab = database.define('Collab', {
 
 });
 
+// associations/relationships
 User.hasMany(Collab);
 Collab.belongsTo(User);
 
@@ -156,6 +265,7 @@ var Follow = database.define('Follow', {
   	}
 });
 
+// associations/relationships
 User.hasMany(Follow);
 Follow.belongsTo(User, { as: 'Current', foreignKey: 'id', constraints: false});
 
@@ -199,6 +309,7 @@ var messageThread = database.define('Follow', {
   	}
 });
 
+// associations/relationships
 Collab.hasMany(messageThread);
 messageThread.belongsTo(Collab);
 
@@ -243,7 +354,7 @@ if (app.get('env') === 'development') {
 }
 
 // production error handler
-// no stacktraces leaked to user
+// no stacktraces leaked to User
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
