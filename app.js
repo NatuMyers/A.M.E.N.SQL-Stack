@@ -55,6 +55,9 @@ var User = database.define('User', {
 
 	// the important
 
+    //WHEN CURLING YOU MUST ENTER THIS IN FIRST!
+    hashword: Sequelize.STRING,
+
 	username: {
 	    unique: true,
 	    isAlphanumeric: true, // only alphanumeric
@@ -75,7 +78,7 @@ var User = database.define('User', {
 			len: [1,15]
 		}
 	},
-	hashword: Sequelize.STRING,
+
 
 	//other strings
     userType: Sequelize.STRING,
@@ -177,7 +180,9 @@ var User = database.define('User', {
 			// hashed pwd goes to db
 			//var hw = User.hashword;
 			//var salt = bcrypt.genSaltSync(10);
+			//console.log(User.hashword);
 			User.hashword = bcrypt.hashSync(User.hashword, 10);
+
 
 
 		},
