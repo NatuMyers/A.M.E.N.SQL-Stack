@@ -14,6 +14,13 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 // var EncryptedField = require('sequelize-encrypted');
 
 
+var jwt = require('express-jwt');
+
+var jwtCheck = jwt({
+  secret: new Buffer('XltYzt1JkBmad6zXbHjvY_UCAZOslrvgGIANs0iUwX8eTz_C1fKE3gATdkNBMj3v', 'base64'),
+  audience: 'T3YAIRD8KHXstcZAuRiMeBidAwdllo5w'
+});
+
 
 var bcrypt = require("bcrypt");
 
@@ -391,16 +398,21 @@ var userResource = epilogue.resource({
   endpoints: ['/api/users', '/api/users/:id']
 });
 
+app.use('/api/users', jwtCheck);
+
 var collabResource = epilogue.resource({
   model: Collab,
   endpoints: ['/api/collabs', '/api/collabs/:id']
 });
+
+app.use('/api/collabs', jwtCheck);
 
 var messageThreadResource = epilogue.resource({
   model: messageThread,
   endpoints: ['/api/messageThreads', '/api/messageThreads/:id']
 });
 
+app.use('/api/messageThreads', jwtCheck);
 
 
 // Create database and listen
