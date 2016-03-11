@@ -13,9 +13,6 @@ var methodOverride = require('method-override'); // simulate DELETE and PUT (exp
 // var passportLocalSequelize = require('passport-local-sequelize');
 // var EncryptedField = require('sequelize-encrypted');
 
-var passport = require('passport'); // Passport: Middleware de Node que facilita la autenticación de usuarios
-var passportLocal =require('passport-local').Strategy;
-
 
 
 var bcrypt = require("bcrypt");
