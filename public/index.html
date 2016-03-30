@@ -20,28 +20,49 @@
 
 </head>
 
+
+
 <!-- apply our angular app to our site -->
 <body ng-app="myApp" class = "grey darken-4"">
 
 <!-- NAVIGATION -->
 <nav role="navigation" class = "black">
-            <div class="nav-wrapper container "><a id="logo-container" href="#" class="brand-logo thin white-text">Raptroop</a>
+            <div class="nav-wrapper container "><a id="logo-container" href="#" class="brand-logo center thin white-text">Raptroop</a>
+
+
+
+
+
+
+            <!-- searchbar -->
+            <ul class="right hide-on-med-and-down">
+            <form>
+                <div class="input-field">
+                <input id="search" type="search" required>
+                <label for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+                </div>
+            </form>
+
+            </ul>
+
 
             <!-- HOME -->
                 <!-- Desktop version -->
                 <ul class="right hide-on-med-and-down">
-                    <li class="thin"><a ui-sref="home">Home</a>
+                    <li class="thin"><a ui-sref="home">Post</a>
                     </li>
                 </ul>
                 <!-- Mobile Version -->
                 <ul id="nav-mobile" class="side-nav">
-                    <li><a ui-sref="home">Home</a>
+                    <li><a ui-sref="home">Post</a>
                     </li>
                 </ul>
 
+
             <!-- ABOUT -->
                 <!-- Desktop version -->
-                <ul class="right hide-on-med-and-down">
+                <ul class="left hide-on-med-and-down">
                     <li class="thin"><a ui-sref="about">About</a>
                     </li>
                 </ul>
@@ -53,8 +74,30 @@
 
 
 
+
+
+            <!-- minimenu -->
                 <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
+
+
+
+
+
+
 </nav>
 
 <!-- THIS IS WHERE WE WILL INJECT OUR CONTENT ============================== -->

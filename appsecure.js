@@ -15,6 +15,14 @@ var app = express();
 var router = express.Router();
 var morgan = require('morgan'); // log requests to the console (express4)
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
+
+//var multer = require('multer'); // v1.0.5
+//var upload = multer(); // for parsing multipart/form-data
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
+
 var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
 
 
@@ -23,12 +31,7 @@ var secret = 'this is the secret secret secret 12356';
 var jwt = require('jsonwebtoken');  //https://npmjs.org/package/node-jsonwebtoken
 
 
-/*
-User.find({ where: { username: 'john-doe' } }).then(
-  function(user) { ... },
-  function(err) { ... }
-);
-*/
+
 
 
 // We are going to protect /api routes with JWT
@@ -52,8 +55,16 @@ app.use(function(err, req, res, next) {
 
 
 app.post('/authenticate', function (req, res) {
-  //TODO validate req.body.username and req.body.password
-  //if is invalid, return 401
+if(!req.body.username) {
+    res.status(401).send('No username specified');
+    return;
+}
+
+if(!req.body.password) {
+    res.status(401).send('No password specified');
+    return;
+}
+
   if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')) {
     res.status(401).send('Wrong user or password');
     return;
@@ -71,49 +82,6 @@ app.post('/authenticate', function (req, res) {
 
   res.json({ token: token });
 });
-
-
-
-
-
-
-/*****
-app.post('/authenticate', function(req, res) {
-
-            //if is invalid, return 401
-            var rehash = bcrypt.hashSync(req.body.password, 10);
-
-
-            User.find({
-                where: {
-                    username: req.body.username,
-                    password: rehash
-                }
-            })
-
-            .then(
-
-                // We are sending the profile inside the token
-                var token = jwt.sign(profile, secret, {
-                    expiresInMinutes: 60 * 5
-                });
-
-                res.json({
-                    token: token
-                });
-
-            });
-
-
-        .catch(function(error) {
-            res.status(401).send('User does not exist.');
-            // Ooops, do some error-handling
-        })
-
-});
-*****/
-
-
 
 
         restMiddleware = require('./middleware.js');
@@ -147,21 +115,6 @@ app.post('/authenticate', function(req, res) {
         var apiRoutes = express.Router();
 
         // MODELS ---- ---- ---- ----
-
-
-        // "id", "createdAt", and "updatedAt" are autmatic keys
-        // Sequelize automatically pluralizes model names
-        // i.e. User becomes a table "Users" in the database
-
-        /*
-        Some times you may want to reference another table,
-        without adding any constraints, or associations.
-        In that case you can manually add the reference
-        attributes to your schema definition, and mark
-        the relations between them.
-        */
-
-
         var User = database.define('User', {
 
             //string
@@ -484,25 +437,6 @@ app.post('/authenticate', function(req, res) {
         });
 
 
-        /*
-
-        passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-            User.findOne({
-                id: jwt_payload.sub
-            }, function(err, user) {
-                if (err) {
-                    return done(err, false);
-                }
-                if (user) {
-                    done(null, user);
-                } else {
-                    done(null, false);
-                    // or you could create a new account
-                }
-            });
-        }));
-        */
-
 
         // MODEL END POINTS with EPILOGUE ---- ---- ---- ----
         // Create REST resource
@@ -543,143 +477,6 @@ app.post('/authenticate', function(req, res) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-        /*
-
-        userResource.create.auth(function (req, res) {
-
-                    var newUser = User.build();
-                    var newHashword = req.body.hashword || '';
-                    var newUsername = req.body.username || '';
-                    // empty
-                    if (newUsername == '' || newHashword == '') {
-                        res.status(401);
-                        res.json({
-                            "status": 401,
-                            "message": "Invalid credentials"
-                        });
-                        return;
-                    }
-
-                    newUser.retrieveByNamePassword(newUsername, function (userChecked) {
-                        if (userChecked) {
-                            // If authentication is success, we will generate a token
-                            // and dispatch it to the client
-                            res.json(genToken(users));
-                            return;
-                        } else {
-                            // If authentication fails, we send a 401 back
-                            res.status(401);
-                            res.json({
-                                "status": 401,
-                                "message": "Invalid credentials"
-                            });
-                            return;
-                        }
-                    }, function (error) {
-                        res.status(401);
-                        res.json({
-                            "status": 401,
-                            "message": "Invalid credentials"
-                        });
-                        return;
-                    });
-                });
-
-
-            var genToken = function(user) {
-                var expires = expiresIn(7); // 7 days
-                var token = jwt.encode({
-                    exp: expires,
-                    user_id: user.id,
-                    organization_id: user.organization_id,
-                    type_id: user.type_id,
-                    division_id: user.division_id
-
-                }, require('./sec')());
-
-                return {
-                    token: token,
-                    expires: expires,
-                    user: user
-                };
-            };
-
-            var expiresIn = function(numDays) {
-                var dateObj = new Date();
-                return dateObj.setDate(dateObj.getDate() + numDays);
-            };
-
-        */
-
-
-
-        /*
-
-        password: {
-            type: DataTypes.VIRTUAL,
-            set function (val) {
-               this.setDataValue('password', val); // Remember to set the data value, otherwise it won't be validated
-               this.setDataValue('hashword', this.salt + val);
-             },
-             validate: {
-                isLongEnough: function (val) {
-                  if (val.length < 8) {
-                    throw new Error("Please choose a longer password")
-                 }
-              }
-            }
-        }
-
-        */
-
-
-        /*
-
-
-        // Route all Traffic to Secure Server
-        // Order is important (this should be the first route)
-        app.all('*', function(req, res, next){
-          if (req.secure) {
-            return next();
-          };
-          res.redirect('https://troop.tech/:'+HTTPS_PORT+req.url);
-          // res.redirect('https://'+req.hostname+':'+HTTPS_PORT+req.url);
-        });
-        */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         app.get('/api/restricted', function(req, res) {
             console.log('user ' + req.body.username + ' is calling /api/restricted');
             res.json({
@@ -688,10 +485,7 @@ app.post('/authenticate', function(req, res) {
         });
 
 
-
-
-
-        // Create database and listen
+        // Create database and listen -------------------------
         database
         .sync({
             force: false
