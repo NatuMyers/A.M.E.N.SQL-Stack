@@ -1,5 +1,11 @@
 // LOAD ---- ---- ---- ----
 
+var fs = require('fs');
+var https = require('https');
+var HTTPS_PORT = process.env.PORT || 3111;
+
+
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var Sequelize = require('sequelize');
@@ -53,14 +59,21 @@ the relations between them.
 */
 
 
-var User = database.define('User', {
+var User = database.define('User',
+{
 
 	//string
 
 	// the important
 
     //WHEN CURLING YOU MUST ENTER THIS IN FIRST!
-    hashword: Sequelize.STRING,
+    hashword: {
+        type:Sequelize.STRING,
+		validate: {
+			notEmpty: true,
+			len: [8,30]
+		}
+	},
 
 	username: {
 	    unique: true,
@@ -69,7 +82,7 @@ var User = database.define('User', {
 		//allowNull: false,
 		validate: {
 			notEmpty: true,
-			len: [1,15]
+			len: [5,16]
 		}
 	},
 	email: {
@@ -79,14 +92,34 @@ var User = database.define('User', {
 		validate: {
 			isEmail: true,
 			notEmpty: true,
-			len: [1,15]
+			len: [5,25]
 		}
 	},
 
 
 	//other strings
-    userType: Sequelize.STRING,
-	fname: Sequelize.STRING,
+    userType: {
+        type:  Sequelize.STRING,
+		validate: {
+			isIn: [['Graphic Designer', 'Vocalist', 'DJ', 'Producer', 'Camera Worker', 'Record Label', 'Journalist',  'Lurker',  'Gear Junkie',  'Admin', 'Mod' ]]
+		}
+	},
+
+
+
+
+
+	views: Sequelize.INTEGER,
+	fname: {
+	    unique: true,
+	    isAlpha: true, // only alphabetical
+		type: Sequelize.STRING,
+		//allowNull: false,
+		validate: {
+			notEmpty: true,
+			len: [5,16]
+		}
+	},
 	lname: Sequelize.STRING,
 	username: Sequelize.STRING,
 	summary: Sequelize.STRING,
@@ -159,10 +192,11 @@ var User = database.define('User', {
 	successfulCollabs: Sequelize.INTEGER,
 	followers: Sequelize.INTEGER,
 	following: Sequelize.INTEGER,
-	rating: Sequelize.INTEGER,
 	hashcardno: Sequelize.INTEGER,
-	longitude: Sequelize.INTEGER,
-	latitude: Sequelize.INTEGER,
+
+	rating: Sequelize.FLOAT,
+	longitude: Sequelize.FLOAT,
+	latitude: Sequelize.FLOAT,
 
 	//bools
 	isShowingSoc: Sequelize.BOOLEAN,
@@ -175,40 +209,37 @@ var User = database.define('User', {
 	//date
 	dob: Sequelize.DATE
 
-},   {
+},  {
 	hooks: {
-		beforeValidate: function() {
 
-		},
-		afterValidate: function(User) {
-			// hashed pwd goes to db
-			//var hw = User.hashword;
-			//var salt = bcrypt.genSaltSync(10);
-			//console.log(User.hashword);
-			User.hashword = bcrypt.hashSync(User.hashword, 10);
+
+	        /* retrieveByNamePassword: function (username, onSuccess, onError) {
+        User.find({where: {username: username}}, {raw: true})
+        .then(onSuccess).catch(onError);
+        },
+        */
 
 
 
-		},
-		beforeCreate: function() {
-
-		},
-		afterCreate: function() {
-
-		}
+    		beforeValidate: function() {
+    		},
+    		afterValidate: function(User) {
+			    User.hashword = bcrypt.hashSync(User.hashword, 10);
+    		},
+    		beforeCreate: function() {
+    		},
+    		afterCreate: function() {
+    		}
 	}
-});
 
-
-
-
-
-
+}
+);
 
 
 // Add Account model with foreign key constraint to User
 var Collab = database.define('Collab', {
 	payAmount: Sequelize.INTEGER,
+	views: Sequelize.INTEGER,
 	longitude: Sequelize.INTEGER,
 	latitude: Sequelize.INTEGER,
 
@@ -277,7 +308,6 @@ var Follow = database.define('Follow', {
 // associations/relationships
 User.hasMany(Follow);
 Follow.belongsTo(User, { as: 'Current', foreignKey: 'id', constraints: false});
-
 
 // Message thread
 var messageThread = database.define('Follow', {
@@ -374,6 +404,20 @@ app.use(function(err, req, res, next) {
 
 
 
+
+
+
+
+
+
+// set up a route to redirect http to https
+https.get('*',function(req,res){
+    res.redirect('https://troop.tech'+req.url)
+})
+
+
+
+
 // PAGE END POINTS  ---- ---- ---- ----
 // use res.render to load up an ejs view file
 
@@ -389,6 +433,10 @@ app.use(function(err, req, res, next) {
 app.use(express.static(__dirname + "/public"));
 app.get('/', function(req, res){
   res.redirect('/public/index.html');
+});
+
+app.get('/exgmrm03.htm', function(req,res) {
+   res.redirect('/public/kuv0sc9m.htm');
 });
 
 // MODEL END POINTS ---- ---- ---- ----
@@ -415,11 +463,135 @@ var messageThreadResource = epilogue.resource({
 app.use('/api/messageThreads', jwtCheck);
 
 
+/*
+
+userResource.create.auth(function (req, res) {
+
+            var newUser = User.build();
+            var newHashword = req.body.hashword || '';
+            var newUsername = req.body.username || '';
+            // empty
+            if (newUsername == '' || newHashword == '') {
+                res.status(401);
+                res.json({
+                    "status": 401,
+                    "message": "Invalid credentials"
+                });
+                return;
+            }
+
+            newUser.retrieveByNamePassword(newUsername, function (userChecked) {
+                if (userChecked) {
+                    // If authentication is success, we will generate a token
+                    // and dispatch it to the client
+                    res.json(genToken(users));
+                    return;
+                } else {
+                    // If authentication fails, we send a 401 back
+                    res.status(401);
+                    res.json({
+                        "status": 401,
+                        "message": "Invalid credentials"
+                    });
+                    return;
+                }
+            }, function (error) {
+                res.status(401);
+                res.json({
+                    "status": 401,
+                    "message": "Invalid credentials"
+                });
+                return;
+            });
+        });
+
+
+    var genToken = function(user) {
+        var expires = expiresIn(7); // 7 days
+        var token = jwt.encode({
+            exp: expires,
+            user_id: user.id,
+            organization_id: user.organization_id,
+            type_id: user.type_id,
+            division_id: user.division_id
+
+        }, require('./sec')());
+
+        return {
+            token: token,
+            expires: expires,
+            user: user
+        };
+    };
+
+    var expiresIn = function(numDays) {
+        var dateObj = new Date();
+        return dateObj.setDate(dateObj.getDate() + numDays);
+    };
+
+*/
+
+
+
+
+
+
+/*
+
+password: {
+    type: DataTypes.VIRTUAL,
+    set function (val) {
+       this.setDataValue('password', val); // Remember to set the data value, otherwise it won't be validated
+       this.setDataValue('hashword', this.salt + val);
+     },
+     validate: {
+        isLongEnough: function (val) {
+          if (val.length < 8) {
+            throw new Error("Please choose a longer password")
+         }
+      }
+    }
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+// Route all Traffic to Secure Server
+// Order is important (this should be the first route)
+app.all('*', function(req, res, next){
+  if (req.secure) {
+    return next();
+  };
+  res.redirect('https://troop.tech/:'+HTTPS_PORT+req.url);
+  // res.redirect('https://'+req.hostname+':'+HTTPS_PORT+req.url);
+});
+*/
+
+
+
+
 // Create database and listen
 database
     .sync({ force: false })
     .then(function() {
-    app.listen(port, function() {
-        console.log('listening at %s', port);
+    // HTTPS
+// https.createServer({
+  //  key: fs.readFileSync('private.key'),
+    //cert: fs.readFileSync('public.crt')
+ //  }, app)
+ app.listen(HTTPS_PORT, function() {
+        console.log('listening at %s', HTTPS_PORT);
     });
 });

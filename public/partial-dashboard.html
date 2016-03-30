@@ -1,0 +1,73 @@
+
+
+
+
+        <div class="section no-pad-bot" ng-controller="userController" id="index-banner">
+            <div class="container">
+                <br></br>
+
+
+                <!-- If user IS logged out -->
+                <h1 class="header center white-text thin" >Login, fam!</h1>
+                <div class="col s12 m6 l6 center">
+
+                    <div ng-show="!isAuthenticated" >
+                        <div class="card-panel  grey lighten-3" >
+                            <form>
+                                <div class="row">
+                                    <div class=" input-field col s6 offset-s3">
+                                        <i class="material-icons prefix">account_circle</i>
+                                        <input type="text" class="validate" name="user" ng-model="user.username" placeholder="Username">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class=" input-field col s6 offset-s3">
+                                        <i class="material-icons prefix">lock</i>
+                                        <input type="password" class="validate" name="pass" ng-model="user.password" placeholder="Password">
+                                    </div>
+                                </div>
+                                <button class="btn waves-effect waves-light"   ng-click="loginUser()">Submit
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <!-- End If user IS logged out -->
+
+                <!-- If user IS logged IN -->
+
+
+                <div class="card-panel  grey lighten-3" ng-show="isAuthenticated" >
+                    <h1 class="header center white-text thin" >Welcome!!!!</h1>
+                    <div class="col s12 m6 l6 center">
+
+                        <!-- restricted crap -->
+                        <a ng-click="callRestricted()" href="">Shh, this is private!</a>
+                            <br>
+                            <div>{{message}}</div>
+                        <a ng-click="logout()" href="">Logout</a>
+
+                    </div>
+                    <!-- End If user IS logged in -->
+
+                </div>
+
+                <div ui-view></div>
+
+            </div>
+
+            <br></br>
+
+
+        </div>
+
+        </div>
+
+
+
+
+
+
+
+
+
