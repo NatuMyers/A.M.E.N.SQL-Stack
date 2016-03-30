@@ -23,7 +23,6 @@ myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
             templateUrl: 'partial-about.html'
         })
 
-
         .state('register', {
             url: '/register',
             templateUrl: 'partial-register.html'
@@ -33,36 +32,6 @@ myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -113,9 +82,6 @@ myApp.controller('userController', function ($scope, $http, $window) {
       });
   };
 
-
-
-
   $scope.logout = function () {
     $scope.welcome = '';
     $scope.message = '';
@@ -133,6 +99,10 @@ myApp.controller('userController', function ($scope, $http, $window) {
     });
   };
 
+
+
+
+
 });
 
 
@@ -143,17 +113,29 @@ myApp.controller('userController', function ($scope, $http, $window) {
 
 
 
-
-
-
-
-myApp.controller('registerController', function ($scope, $http) {
+myApp.controller('registerController', function ($scope, $resource) {
     $scope.registerUser = function () {
+
+function pollController($scope, $resource) {
+    var userConnection = $resource('/api/users/:id', {id: '@id'});
+
+    $scope.saveEntry = function() {
+    userConnection.save($scope.password);
+        userConnection.save($scope.username);
+        userConnection.save($scope.email);
+
+    }
+}
+
+
+
+
+    /*
            // use $.param jQuery function to serialize data from JSON
             var data = $.param({
                 hashword: $scope.password,
                 username: $scope.username,
-                email: $scope.email,
+                email: $scope.email
             });
 
             var config = {
@@ -164,24 +146,26 @@ myApp.controller('registerController', function ($scope, $http) {
 
             $http.post('/api/users', data, config)
             .success(function (data, status, headers, config) {
+                console.log("successful post");
                 $scope.PostDataResponse = data;
             })
             .error(function (data, status, header, config) {
+                console.log("failed post");
                 $scope.ResponseDetails = "Data: " + data +
                     "<hr />status: " + status +
                     "<hr />headers: " + header +
                     "<hr />config: " + config;
             });
+
+        */
+
+
         };
-});
 
 
 
 
-
-
-
-  $scope.addCollab = function () {
+$scope.addCollab = function () {
     $http
       .post('/api/collabs', $scope.user)
       // if you sucessfully post to authenticate, then auth = true locally!
@@ -227,6 +211,25 @@ $scope.updateUser = function () {
                 "\n\n\n\nconfig: " + config);
       });
   };
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

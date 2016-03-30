@@ -18,8 +18,8 @@ var bodyParser = require('body-parser'); // pull information from HTML POST (exp
 
 
 
-//app.use(bodyParser.json()); // for parsing application/json
-//app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
 
@@ -38,7 +38,6 @@ var bodyParser = require('body-parser'); // pull information from HTML POST (exp
 
 
 var express = require('express');
-var bodyParser = require('body-parser');
 
 var jwt = require('jsonwebtoken');  //https://npmjs.org/package/node-jsonwebtoken
 var expressJwt = require('express-jwt'); //https://npmjs.org/package/express-jwt
@@ -53,7 +52,7 @@ var secret = 'this is the secret secret secret 12356';
 
 
 
-
+/* !!!!!!!!!!!!!!!!!!!!!!$$$$$$$$$$!!!
 
 // We are going to protect /api routes with JWT
 app.use('/api', expressJwt({secret: secret}));
@@ -67,9 +66,14 @@ app.use(function(err, req, res, next){
   }
 });
 
+*/
+
+
 app.post('/authenticate', function (req, res) {
   //TODO validate req.body.username and req.body.password
   //if is invalid, return 401
+
+
   if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')) {
     res.status(401).send('Wrong user or password');
     return;

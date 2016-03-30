@@ -2,52 +2,45 @@
     <div class="container">
         <br></br>
 
-                <h1 class="header center white-text  thin">Hip Hop Made Accessible.</h1>
+        <h1 class="header center white-text  thin">Hip Hop Made Accessible.</h1>
 
-                <div class="col s12 m6 l6 center">
-                    <div class="card-panel  grey lighten-3">
+        <div class="col s12 m6 l6 center">
+            <div class="card-panel  grey lighten-3">
 
-                            <form>
-                                <div class="row">
-                                    <div class=" input-field col s6 offset-s3">
-                                        <i class="material-icons prefix">account_circle</i>
-                                        <input type="text" class="validate" ng-model="user.username" placeholder="Username">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class=" input-field col s6 offset-s3">
-                                        <i class="material-icons prefix">account_circle</i>
-                                        <input type="text" class="validate" ng-model="user.email" placeholder="Email">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class=" input-field col s6 offset-s3">
-                                        <i class="material-icons prefix">account_lock</i>
-                                        <input type="text" class="validate" ng-model="user.password" placeholder="Password">
-                                    </div>
-                                </div>
-                                <button class="btn waves-effect waves-light" type="submit" ng-click="registerUser()">Submit
-                                    <i class="material-icons right">send</i>
-                                </button>
-                            </form>
-
+                <form>
+                    <div class="row">
+                        <div class=" input-field col s6 offset-s3">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input type="text" class="validate" ng-model="user.username" placeholder="Username" required>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class=" input-field col s6 offset-s3">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input type="text" class="validate" ng-model="user.email" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class=" input-field col s6 offset-s3">
+                            <i class="material-icons prefix">account_lock</i>
+                            <input type="text" class="validate" ng-model="user.password" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect waves-light" type="submit" ng-click="registerUser()">Submit
+                            <i class="material-icons right">send</i>
+                    </button>
+                </form>
 
-                <div ui-view></div>
+
+
+            </div>
+        </div>
+
+        <div ui-view></div>
 
     </div>
 
-            <br></br>
+    <br></br>
 
 
 </div>
-
-
-
-
-
-
-
-
-
