@@ -46,6 +46,15 @@ var expressJwt = require('express-jwt'); //https://npmjs.org/package/express-jwt
 
 var secret = 'this is the secret secret secret 12356';
 
+
+
+
+
+
+
+
+
+
 // We are going to protect /api routes with JWT
 app.use('/api', expressJwt({secret: secret}));
 
@@ -74,7 +83,7 @@ app.post('/authenticate', function (req, res) {
   };
 
   // We are sending the profile inside the token
-  var token = jwt.sign(profile, secret, { expiresInMinutes: 60*5 });
+  var token = jwt.sign(profile, secret, { expiresIn: 18000 });
 
   res.json({ token: token });
 });

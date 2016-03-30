@@ -31,6 +31,20 @@
 
 
 
+        <div ng-show="isAuthenticated">
+
+            <!-- ABOUT -->
+                <!-- Desktop version -->
+                <ul class="left hide-on-med-and-down">
+                    <li class="thin"><a ui-sref="about">About</a>
+                    </li>
+                </ul>
+                <!-- Mobile Version -->
+                <ul id="nav-mobile" class="side-nav">
+                    <li><a ui-sref="about">About</a>
+                    </li>
+                </ul>
+        </div>
 
 
 
@@ -47,17 +61,6 @@
             </ul>
 
 
-            <!-- HOME -->
-                <!-- Desktop version -->
-                <ul class="right hide-on-med-and-down">
-                    <li class="thin"><a ui-sref="home">Post</a>
-                    </li>
-                </ul>
-                <!-- Mobile Version -->
-                <ul id="nav-mobile" class="side-nav">
-                    <li><a ui-sref="home">Post</a>
-                    </li>
-                </ul>
 
 
             <!-- ABOUT -->

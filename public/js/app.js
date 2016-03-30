@@ -21,12 +21,44 @@ myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
         .state('about', {
             url: '/about',
             templateUrl: 'partial-about.html'
+        })
+
+
+        .state('register', {
+            url: '/register',
+            templateUrl: 'partial-register.html'
         });
 
 
     $httpProvider.interceptors.push('authInterceptor');
 
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -81,6 +113,9 @@ myApp.controller('userController', function ($scope, $http, $window) {
       });
   };
 
+
+
+
   $scope.logout = function () {
     $scope.welcome = '';
     $scope.message = '';
@@ -99,6 +134,103 @@ myApp.controller('userController', function ($scope, $http, $window) {
   };
 
 });
+
+
+
+// user privileges -------------------------------------
+
+
+
+
+
+
+
+
+
+myApp.controller('registerController', function ($scope, $http) {
+    $scope.registerUser = function () {
+           // use $.param jQuery function to serialize data from JSON
+            var data = $.param({
+                hashword: $scope.password,
+                username: $scope.username,
+                email: $scope.email,
+            });
+
+            var config = {
+                headers : {
+                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+                }
+            }
+
+            $http.post('/api/users', data, config)
+            .success(function (data, status, headers, config) {
+                $scope.PostDataResponse = data;
+            })
+            .error(function (data, status, header, config) {
+                $scope.ResponseDetails = "Data: " + data +
+                    "<hr />status: " + status +
+                    "<hr />headers: " + header +
+                    "<hr />config: " + config;
+            });
+        };
+});
+
+
+
+
+
+
+
+  $scope.addCollab = function () {
+    $http
+      .post('/api/collabs', $scope.user)
+      // if you sucessfully post to authenticate, then auth = true locally!
+      .success(function (data, status, headers, config) {
+        $window.sessionStorage.token = data.token;
+        $scope.isAuthenticated = true;
+        var encodedProfile = data.token.split('.')[1];
+        var profile = JSON.parse(url_base64_decode(encodedProfile));
+        $scope.welcome = 'Welcome ' + profile.first_name + ' ' + profile.last_name;
+      })
+      .error(function (data, status, headers, config) {
+        // Erase the token if the user fails to log in
+        delete $window.sessionStorage.token;
+        $scope.isAuthenticated = false;
+
+        // Handle login errors here
+        $scope.error = 'Error: Invalid user or password';
+        $scope.welcome = '';
+      });
+  };
+
+
+
+$scope.updateUser = function () {
+
+    var userOptions = $.param({
+        firstName: $scope.userFirstName,
+        lastName: $scope.userLastName,
+        lastName: $scope.userFocus,
+        lastName: $scope.userType
+    });
+
+    $http
+      .put('/api/users?'+data)
+      // if you sucessfully post to authenticate, then auth = true locally!
+      .success(function (data, status, headers, config) {
+        $scope.ServerResponse = data;
+      })
+      .error(function (data, status, headers, config) {
+            $scope.ServerResponse =  htmlDecode("Data: " + data +
+                "\n\n\n\nstatus: " + status +
+                "\n\n\n\nheaders: " + header +
+                "\n\n\n\nconfig: " + config);
+      });
+  };
+
+
+
+
 
 myApp.factory('authInterceptor', function ($rootScope, $q, $window) {
   return {
