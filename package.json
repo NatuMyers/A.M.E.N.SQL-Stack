@@ -32,7 +32,8 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.17.1",
     "sequelize-encrypted": "^0.1.0",
-    "sequelize-restful-extended": "^0.1.4"
+    "sequelize-restful-extended": "^0.1.4",
+    "node-jsonwebtoken":"auth0/node-jsonwebtoken"
   },
   "devDependencies": {
     "grunt-autoprefixer": "~0.4.2",

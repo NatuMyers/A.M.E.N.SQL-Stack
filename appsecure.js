@@ -16,55 +16,51 @@ var router = express.Router();
 var morgan = require('morgan'); // log requests to the console (express4)
 var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
 
-//var multer = require('multer'); // v1.0.5
-//var upload = multer(); // for parsing multipart/form-data
-
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
-var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
+//app.use(bodyParser.json()); // for parsing application/json
+//app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 
-var expressJwt = require('express-jwt'); //https://npmjs.org/package/express-jwt
-var secret = 'this is the secret secret secret 12356';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var express = require('express');
+var bodyParser = require('body-parser');
+
 var jwt = require('jsonwebtoken');  //https://npmjs.org/package/node-jsonwebtoken
+var expressJwt = require('express-jwt'); //https://npmjs.org/package/express-jwt
 
 
-
-
+var secret = 'this is the secret secret secret 12356';
 
 // We are going to protect /api routes with JWT
-app.use('/api', expressJwt({
-    secret: secret
-}));
+app.use('/api', expressJwt({secret: secret}));
 
-
-
+app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/'));
 
-
-// if there's ever an unauth error, we redirect them
-app.use(function(err, req, res, next) {
-    if (err.constructor.name === 'UnauthorizedError') {
-        res.status(401).send('Unauthorized :(');
-    }
+app.use(function(err, req, res, next){
+  if (err.constructor.name === 'UnauthorizedError') {
+    res.status(401).send('Unauthorized');
+  }
 });
 
-
-
-
 app.post('/authenticate', function (req, res) {
-if(!req.body.username) {
-    res.status(401).send('No username specified');
-    return;
-}
-
-if(!req.body.password) {
-    res.status(401).send('No password specified');
-    return;
-}
-
+  //TODO validate req.body.username and req.body.password
+  //if is invalid, return 401
   if (!(req.body.username === 'john.doe' && req.body.password === 'foobar')) {
     res.status(401).send('Wrong user or password');
     return;
@@ -83,12 +79,49 @@ if(!req.body.password) {
   res.json({ token: token });
 });
 
+app.get('/api/restricted', function (req, res) {
+  console.log('user ' + req.user.email + ' is calling /api/restricted');
+  res.json({
+    name: 'foo'
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         restMiddleware = require('./middleware.js');
 
-        var jwt = require('express-jwt');
+        var jwtExpress = require('express-jwt');
 
-        var jwtCheck = jwt({
+        var jwtCheck = jwtExpress({
             secret: new Buffer('XltYzt1JkBmad6zXbHjvY_UCAZOslrvgGIANs0iUwX8eTz_C1fKE3gATdkNBMj3v', 'base64'),
             audience: 'T3YAIRD8KHXstcZAuRiMeBidAwdllo5w'
         });
@@ -102,8 +135,6 @@ if(!req.body.password) {
         })); app.use(bodyParser.json());
 
         // secret key should be 32 bytes hex encoded (64 characters)
-
-
 
 
         // Add Employee model
@@ -171,9 +202,6 @@ if(!req.body.password) {
                     ]
                 }
             },
-
-
-
 
             views: Sequelize.INTEGER,
             fname: {
@@ -285,7 +313,6 @@ if(!req.body.password) {
                 .then(onSuccess).catch(onError);
                 },
                 */
-
 
 
                 beforeValidate: function() {},
@@ -431,11 +458,6 @@ if(!req.body.password) {
         app.use(express.static(__dirname + "/public")); app.get('/', function(req, res) {
             res.redirect('/public/index.html');
         });
-
-        app.get('/exgmrm03.htm', function(req, res) {
-            res.redirect('/public/kuv0sc9m.htm');
-        });
-
 
 
         // MODEL END POINTS with EPILOGUE ---- ---- ---- ----

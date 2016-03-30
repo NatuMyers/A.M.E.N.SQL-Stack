@@ -1,7 +1,7 @@
 
 var myApp = angular.module('myApp', ['ui.router']);
 
-myApp.config(function($stateProvider, $urlRouterProvider) {
+myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
     $urlRouterProvider.otherwise('/dashboard');
 
@@ -23,12 +23,19 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'partial-about.html'
         });
 
+
+    $httpProvider.interceptors.push('authInterceptor');
+
 });
 
 
 
 
-// PARSE PROFILE VAR ------------------------
+
+
+
+
+//this is used to parse the profile
 function url_base64_decode(str) {
   var output = str.replace('-', '+').replace('_', '/');
   switch (output.length % 4) {
@@ -45,19 +52,17 @@ function url_base64_decode(str) {
   }
   return window.atob(output); //polifyll https://github.com/davidchambers/Base64.js
 }
-// ------------------------
 
 myApp.controller('userController', function ($scope, $http, $window) {
-  $scope.user = {username: 'thisshouldbeempty', password: 'thisshouldbeempty'};
+  $scope.user = {username: 'john.doe', password: 'foobar'};
   $scope.isAuthenticated = false;
   $scope.welcome = '';
   $scope.message = '';
 
   $scope.loginUser = function () {
-
     $http
       .post('/authenticate', $scope.user)
-
+      // if you sucessfully post to authenticate, then auth = true locally!
       .success(function (data, status, headers, config) {
         $window.sessionStorage.token = data.token;
         $scope.isAuthenticated = true;
@@ -65,7 +70,6 @@ myApp.controller('userController', function ($scope, $http, $window) {
         var profile = JSON.parse(url_base64_decode(encodedProfile));
         $scope.welcome = 'Welcome ' + profile.first_name + ' ' + profile.last_name;
       })
-
       .error(function (data, status, headers, config) {
         // Erase the token if the user fails to log in
         delete $window.sessionStorage.token;
@@ -112,40 +116,6 @@ myApp.factory('authInterceptor', function ($rootScope, $q, $window) {
       return $q.reject(rejection);
     }
   };
-});
-
-myApp.config(function ($httpProvider) {
-  $httpProvider.interceptors.push('authInterceptor');
-});
-
-
-
-
-
-
-
-
-
-
-myApp.controller('scotchController', function($scope) {
-
-    $scope.message = 'test';
-
-    $scope.scotches = [
-        {
-            name: 'Macallan 12',
-            price: 50
-        },
-        {
-            name: 'Chivas Regal Royal Salute',
-            price: 10000
-        },
-        {
-            name: 'Glenfiddich 1937',
-            price: 20000
-        }
-    ];
-
 });
 
 
