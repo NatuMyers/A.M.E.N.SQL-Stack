@@ -6,6 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "angular-resource": "^1.5.3",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.3.0",
     "bluebird": "^3.0.0",
@@ -24,6 +25,7 @@
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
     "mysql": "^2.10.2",
+    "node-jsonwebtoken": "auth0/node-jsonwebtoken",
     "passport": "^0.3.2",
     "passport-jwt": "^2.0.0",
     "passport-local": "^1.0.0",
@@ -32,8 +34,7 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.17.1",
     "sequelize-encrypted": "^0.1.0",
-    "sequelize-restful-extended": "^0.1.4",
-    "node-jsonwebtoken":"auth0/node-jsonwebtoken"
+    "sequelize-restful-extended": "^0.1.4"
   },
   "devDependencies": {
     "grunt-autoprefixer": "~0.4.2",

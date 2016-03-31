@@ -1,5 +1,13 @@
 
-var myApp = angular.module('myApp', ['ui.router']);
+var myApp = angular.module('myApp', ['ui.router','ngRouter'])
+
+
+myApp.factory('UserService', function($resource) {
+
+    return $resource('https://troop.tech/api/users/:user', {user: '@user'});
+
+});
+
 
 myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 
@@ -34,27 +42,15 @@ myApp.config(function($stateProvider, $urlRouterProvider, $httpProvider) {
 });
 
 
+myApp.controller('userController', function ($scope, $http, $window, UserService) {
+
+  $scope.users = UserService.query();
+  $scope.setDataForUser = function(userID) {
+  };
+  $scope.addUser = function(){
+  };
 
 
-//this is used to parse the profile
-function url_base64_decode(str) {
-  var output = str.replace('-', '+').replace('_', '/');
-  switch (output.length % 4) {
-    case 0:
-      break;
-    case 2:
-      output += '==';
-      break;
-    case 3:
-      output += '=';
-      break;
-    default:
-      throw 'Illegal base64url string!';
-  }
-  return window.atob(output); //polifyll https://github.com/davidchambers/Base64.js
-}
-
-myApp.controller('userController', function ($scope, $http, $window) {
   $scope.user = {username: 'john.doe', password: 'foobar'};
   $scope.isAuthenticated = false;
   $scope.welcome = '';
