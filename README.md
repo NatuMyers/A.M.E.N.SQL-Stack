@@ -5,7 +5,7 @@
 ## git add .; git commit -m "update"; git remote add origin https://github.com/NatuMyers/A.M.E.N.SQL-Stack.git; git push -u origin master
 
 ## (When POSTing by cURLing, add the hashword first!)
-
+ 
 ## Ingredients:<br />
 <b>A<b /> ngularJS<br />
 <b>M<b /> aterialize (Frontend) https://github.com/krescruz/angular-materialize<br />
